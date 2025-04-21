@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Music Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            min-height: 100vh;
+            background-color: #121212;
+            color: #fff;
+        }
+         .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .navbar .logo {
+            font-size: 1.8em;
+            color: #fff;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo i {
+            margin-right: 10px;
+            font-size: 2em;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar ul li {
+            display: inline-block;c
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #cd7ace; 
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: #181818;
+            width: 250px;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h1 {
+            color: #1DB954;
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar .nav-item {
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .sidebar .nav-item:hover {
+            color: #fff;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            font-size: 2rem;
+        }
+
+        .search-bar {
+            width: 80%;
+            max-width: 600px;
+            padding: 10px;
+            margin-bottom: 30px;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border: 1px solid #1DB954;
+        }
+
+        .playlist-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .playlist-category {
+            width: 250px;
+            margin: 15px;
+            background-color: #181818;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s;
+            position: relative;
+        }
+
+        .playlist-category:hover {
+            transform: scale(1.05);
+        }
+
+        .playlist-category h3 {
+            text-align: center;
+            padding: 15px;
+            background-color: #333;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .playlist-category img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .song-list {
+            display: none;
+            flex-direction: column;
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .song {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-bottom: 1px solid #444;
+        }
+
+        .song:hover {
+            background-color: #444;
+        }
+
+        .song img {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .song-info {
+            flex-grow: 1;
+        }
+
+        .song-info h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .song-info p {
+            font-size: 0.85rem;
+            color: #b3b3b3;
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .audio-controls .control-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .audio-controls button {
+            background-color: #1DB954;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .audio-controls button:hover {
+            background-color: #1ed760;
+        }
+
+        .audio-controls input[type="range"] {
+            width: 300px;
+            margin: 10px 0;
+            background-color: #333;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .audio-controls input[type="range"]::-webkit-slider-thumb {
+            background-color: #1DB954;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        .song-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .song-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .song-item img {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+        }
+        .song-info {
+            flex-grow: 1;
+        }
+        .song-info h4 {
+            margin: 0;
+            font-size: 16px;
+        }
+        .song-info p {
+            margin: 0;
+            font-size: 14px;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-music"></i> Music Player
+        </div>
+        <ul>
+            <li><a href="hmp.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="premium.html"><i class="fas fa-crown"></i> Premium</a></li>
+            <li><a href="eg.html"><i class="fas fa-headphones"></i> Songs</a></li>
+            <li><a href="help.html"><i class="fas fa-question-circle"></i> Help</a></li>
+            <li><a href="download.html"><i class="fas fa-download"></i> Download</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h1>My Music</h1>
+        <div class="nav-item" id="homeButton">Home</div>
+        <div class="nav-item" id="libraryButton">Your Library</div>
+        <div class="nav-item" id="searchButton">Search</div>
+        <div class="nav-item" id="myPlaylistButton">My Playlist</div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Home Section -->
+        <div class="header">
+            <h2>All Songs</h2>
+        </div>
+        <div class="playlist-container" id="playlistContainer">
+
+            <!-- Hollywood Category -->
+            <div class="playlist-category" id="hollywoodCategory">
+                <img src="https://www.godfreyhotelhollywood.com/uploads/9/8/6/9/98696408/hollywood-streetscape-homepage-hero_1_orig.jpg" alt="Hollywood">
+                <h3>Hollywood</h3>
+                <div class="song-list" id="hollywoodSongs">
+                    <!-- Hollywood Songs will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--comedy category-->
+            <div class="playlist-category" id="comedyCategory">
+                <img src="https://rukminim2.flixcart.com/image/850/1000/kb9ou4w0/poster/a/c/v/large-funny-comedy-poster-with-frame-f-77-frame-funny-po-077-original-imafsnqg6g7qgyja.jpeg?q=20&crop=false" alt="comedy">
+                <h3>Comedy</h3>
+                <div class="song-list" id="comedySongs">
+                    <!-- Comedy Songs will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--diljit dosanjh-->
+            <div class="playlist-category" id="diljitdosanjhCategory">
+                <img src="https://www.kalkifashion.com/blogs/wp-content/uploads/2023/01/Birthday-Boy-Diljit-Dosanjh-Nail-The-Mundas-Ethnic-Look.jpg" alt="Diljit Dosanjh">
+                <h3>Diljit Dosanjh</h3>
+                <div class="song-list" id="diljitdosanjhSongs">
+                    <!-- Diljit Dosanjh will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Bollywood Category -->
+            <div class="playlist-category" id="bollywoodCategory">
+                <img src="https://t3.ftcdn.net/jpg/02/51/11/56/360_F_251115658_qdOPyuraxekcHlooDi4yCPsW9NlPU2GB.jpg" alt="Bollywood">
+                <h3>Bollywood</h3>
+                <div class="song-list" id="bollywoodSongs">
+                    <!-- Bollywood Songs will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--Romantic Category-->
+            <div class="playlist-category" id="romanticCategory">
+                <img src="https://static.vecteezy.com/system/resources/thumbnails/036/177/205/small_2x/ai-generated-romantic-exchange-of-flowers-in-a-silver-lit-forest-valentine-dating-and-love-proposal-image-photo.jpeg" alt="Romantic">
+                <h3>romantic</h3>
+                <div class="song-list" id="romanticSongs">
+                    <!-- Hollywood Songs will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Pollywood Category -->
+            <div class="playlist-category" id="pollywoodCategory">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvP36Tam5iPoCIjd7r8SHCwK5l5b2A_gFY2g&s" alt="Pollywood">
+                <h3>Pollywood</h3>
+                <div class="song-list" id="pollywoodSongs">
+                    <!-- Pollywood Songs will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--Jordan Sandhu Category-->
+            <div class="playlist-category" id="jordansandhuCategory">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFW0r40uniOWYURYfcJaSE9RoLlm7poJhTHA&s" alt="Jordan Sandhu">
+                <h3>Jordan Sandhu</h3>
+                <div class="song-list" id="jordansandhuSongs">
+                    <!-- Jordan Sandhu will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--Sidhu Moose Wala Category-->
+            <div class="playlist-category" id="sidhumoosewalaCategory">
+                <img src="https://assets.gqindia.com/photos/629f36ba188b21927098f765/master/pass/Sindhu%20Moose%20Wala.jpeg" alt="Sidhu Moose Wala">
+                <h3>Sidhu Moose Wala</h3>
+                <div class="song-list" id="sidhumoosewalaSongs">
+                    <!-- Sidhu Moose Wala will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Nirmat Khaira Category -->
+            <div class="playlist-category" id="nirmatKhairaCategory">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqPaUhhlWKn_KWyUhtRqK8OY9Kg5lgFUOfQw&s" alt="Nirmat Khaira">
+                <h3>Nirmat Khaira</h3>
+                <div class="song-list" id="nirmatKhairaSongs">
+                    <!-- Nirmat Khaira Songs will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--Babbu Maan Category-->
+            <div class="playlist-category" id="babbumaanCategory">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgXPFLrGKa1EKtY97kN868bnf6bajCOwPxOgR_MpvN1rtaYX02xWN1H3oKDB4QWp82ndUmeHqzxo-hORzl3AJdEdvuHfMTGpsX35d1cavpEvgJaNkC-KJ0NvkT-y2YjeTbqzsU9EJ9YO_I/w1200-h630-p-k-no-nu/babbu-maan.png" alt="Babbu Maan">
+                <h3>Babbu Maan</h3>
+                <div class="song-list" id="babbumaanSongs">
+                    <!-- Babbu Maan will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--Amrinder Gill Category-->
+            <div class="playlist-category" id="amrindergillCategory">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLnj1JhTslTP1WJWSBgrsWB0O3omnrLC_m0Q&s" alt="Amrindergill">
+                <h3>Amrinder Gill</h3>
+                <div class="song-list" id="amrindergillSongs">
+                    <!-- Amrinder Gill will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--Sabba Category-->
+            <div class="playlist-category" id="sabbaCategory">
+                <img src="https://i.ytimg.com/vi/JZ_tYDZRUIU/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGHIgVCg2MA8=&rs=AOn4CLCIkvr-yYh0lEmQZSVjK35FlSbqKw" alt="sabba">
+                <h3>Sabba</h3>
+                <div class="song-list" id="sabbaSongs">
+                    <!-- Sabba Songs will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--Kaur B category-->
+            <div class="playlist-category" id="kaurbCategory">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQghnLF18c-2pnuuMZtWJ1f77lDUAskirw8ojcBw8-HB_N7MVvjZBq0fVLKT2TA9PGEXtg&usqp=CAU" alt="kaurb">
+                <h3>Kaur B</h3>
+                <div class="song-list" id="kaurbSongs">
+                    <!-- KaurB will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--Sunanda Sharma Category-->
+            <div class="playlist-category" id="sunandasharmaCategory">
+                <img src="https://static.toiimg.com/thumb/imgsize-23456,msid-65308631,width-600,resizemode-4/65308631.jpg" alt="sunandasharma">
+                <h3>Sunanda Sharma</h3>
+                <div class="song-list" id="sunandasharmaSongs">
+                    <!-- Sunanda Sharma will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!--Aden Category-->
+            <div class="playlist-category" id="adenCategory">
+                <img src="https://i.ytimg.com/vi/lly6El7iMKs/sddefault.jpg" alt="Aden">
+                <h3>Aden</h3>
+                <div class="song-list" id="adenSongs">
+                    <!-- Aden Songs will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Karan Aujla Category -->
+            <div class="playlist-category" id="karanAujlaCategory">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2fBcE12Di0ZE5CIyKvoEjCDEmdVN1icG2vg&s" alt="Karan Aujla">
+                <h3>Karan Aujla</h3>
+                <div class="song-list" id="karanAujlaSongs">
+                    <!-- Karan Aujla Songs will be dynamically inserted here -->
+                </div>
+            </div>
+
+        </div>
+        <!-- Audio Controls -->
+        <div class="audio-controls">
+            <div class="control-buttons">
+                <button id="prevButton"><i class="fas fa-backward"></i></button>
+                <button id="playPauseButton"><i class="fas fa-play"></i></button>
+                <button id="nextButton"><i class="fas fa-forward"></i></button>
+            </div>
+            <input type="range" value="50" id="volume" />
+            <label for="volume" style="color: #b3b3b3;">Volume</label>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for songs (replace these with actual URLs)
+        const songs = {
+            hollywood: [
+                { title: "Shape of You", artist: "Ed Sheeran", cover: "https://i1.sndcdn.com/artworks-000201927280-2vsnux-t500x500.jpg", audio: "https://pagalnew.com.se/files/download/id/6570" },
+                { title: "Blinding Lights", artist: "The Weeknd", cover: "https://i.scdn.co/image/ab67616d0000b2738863bc11d2aa12b54f5aeb36", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+                { title: "WE PRAY", artist: "Cold play", cover: "https://i.ytimg.com/vi/WTC6iJYBAVI/maxresdefault.jpg", audio: "https://pagalnew.com/128-download/47892" },
+                { title: "Hotline Bling", artist: "Drake", album: "Views", audioSrc: "https://www.pagalworld.com.sb/files/download/type/320/id/1182/1.mp3?1", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCAjO7xsu3ridB05ty5X6pAxzLWA_EtRNN_A&s" },
+                { title: "HUMBLE.", artist: "Kendrick Lamar", album: "DAMN.", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNu8kdnyJHYV5nBlivEiImXorHiFVExq6vYg&s" },
+                { title: "Money Trees", artist: "Kendrick Lamar feat. Jay Rock", album: "Good Kid, M.A.A.D City", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3", cover: "https://postertok.com/wp-content/uploads/2024/02/wp-image-37698270920935.webp" },
+                { title: "All of the Lights", artist: "Kanye West", album: "My Beautiful Dark Twisted Fantasy", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRr6tlmprjg33DMYn4Bo_xJEGhjx2w4leuB8g&s" },
+                { title: "Goosebumps", artist: "Travis Scott", album: "Birds in the Trap Sing McKnight", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3", cover: "https://c.saavncdn.com/591/goosebumps-English-2021-20210521144451-500x500.jpg" },
+                { title: "Bad and Boujee", artist: "Migos", album: "Culture", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-18.mp3", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSw9EKBMTamEKUf5OvQnSq5EZ1d1iJtF0wbdA&s" },
+                { title: "Fight Night", artist: "Migos", album: "No Label 2", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-19.mp3", cover: "https://upload.wikimedia.org/wikipedia/en/5/57/Fightnightmigos.jpg" }
+            ],
+            bollywood: [
+                { title: "Raataan Lambiyan", artist: "Jubin Nautiyal", cover: "https://c.saavncdn.com/222/Raataan-Lambiyan-From-Shershaah--Hindi-2021-20210729181107-500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+                { title: "Tum Hi Ho", artist: "Arijit Singh", cover: "https://m.media-amazon.com/images/M/MV5BYmYxNzI2ZTktNmNhMi00ZDEyLWE4ODctNDM0ZTk0NjVjYWNmXkEyXkFqcGc@.V1_QL75_UY190_CR74,0,190,190.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+                { title: "Tum Tak", artist: "A. R. Rahman", album: "Raanjhanaa", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", cover: "https://c.saavncdn.com/461/Tum-Tak-Hindi-2013-20200704132036-500x500.jpg" },
+                { title: "Raabta", artist: "Arijit Singh", album: "Agent Vinod", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", cover: "https://c.saavncdn.com/023/Raabta-Hindi-2017-500x500.jpg" },
+                { title: "Jeene Laga Hoon", artist: "Atif Aslam", album: "Ramaiya Vastavaiya", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkPoosko6fdhGFrqfVyvYxUdJY0ZeGu1eKsg&s" },
+                { title: "Pehla Nasha", artist: "Udit Narayan", album: "Jo Jeeta Wohi Sikandar", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3", cover: "https://qph.cf2.quoracdn.net/main-qimg-882b93b4435c73e005fc9ecd262fde78.webp" },
+                { title: "Tum Mile", artist: "K.K.", album: "Tum Mile", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwrY1NHuLj-XmEwa4S72_wu71hFXiV-wm_Ig&s" },
+                { title: "Sun Saathiya", artist: "Priya Saraiya", album: "ABCD 2", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9BNAkDKSuXcBYpNf1HP34FPtMhijRIvCMjQ&s" },
+                { title: "Raaz Aap", artist: "Atif Aslam", album: "Raaz 3", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3", cover: "https://m.media-amazon.com/images/S/pv-target-images/9f0ac9e16a170a53ccfe5f5467e9a3d73e7de874f8735e040995c594a76eb007.jpg" },
+                { title: "Tum Hi Tum", artist: "Himesh Reshammiya", album: "Andheri Raat", audioSrc: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3", cover: "https://c.saavncdn.com/877/Tum-Hi-Tum-Radha-Krishna-Reprise-Version-Hindi-2022-20230217184237-500x500.jpg" }
+            ],
+            comedy: [
+                { title: "Funny Song 1", artist: "Artist 1", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1hI9zOmEcRsJwL65a9CGxUsxT6e9HTo062w&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+                { title: "Laugh Out Loud", artist: "Comedian A", cover: "https://m.media-amazon.com/images/S/amzn-author-media-prod/9kk5f3idcpdt322i3oflk4oqb5.SY450_CR8%2C0%2C450%2C450.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+                { title: "Joke Song", artist: "Comedian B", cover: "https://qqcdnpictest.mxplay.com/pic/3d08e41239f11711a341fb6b7aff432f/en/2x3/312x468/d1b61cbe34363e600fef9f5ae8052391_1280x1920.webp", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+                { title: "Funny Remix", artist: "DJ LOL", cover: "https://thumbs.dreamstime.com/b/fun-comedy-podcast-logo-design-yellow-microphone-funny-face-icon-simple-funny-logo-fun-comedy-podcast-232280370.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+                { title: "Comedy Central", artist: "Stand Up King", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcZxomtUB0UbNnjuUzEDLa13wimPpyYT212Q&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+                { title: "Stand Up Giggle", artist: "Funnyman", cover: "https://m.media-amazon.com/images/M/MV5BNjllYWQ5YjgtY2MzYi00OWY3LTg1YmQtNzU1ZThmNjY0M2NmXkEyXkFqcGc@.V1.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+                { title: "Haha Song", artist: "Funny Guy", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcp6I2tou8THCEGJ7XN2I-gEkEfoVQFiYQpw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+                { title: "Laugh It Off", artist: "Comedian C", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMtoe7f_cKjdWz8G0yOXvaiLL0wF6QxllBvQ&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+                { title: "Gag Track", artist: "Funny Beats", cover: "https://www.scriptreaderpro.com/wp-content/uploads/2019/06/ted-comedy-script-2.png", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+                { title: "Laughter Everywhere", artist: "Comedian D", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCoD4T1FOW5uV2rGwOoOgbD3WkgFj6efoSeA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+            ],
+            diljitdosanjh: [
+            { title: "Proper Patola", artist: "Diljit Dosanjh", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToqKPOsMshjq32BHyEUfufLE5Wivb55cLhiA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { title: "Do You Know", artist: "Diljit Dosanjh", cover: "https://static.toiimg.com/thumb/imgsize-23456,msid-111517122,width-600,resizemode-4/111517122.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { title: "Laembadgini", artist: "Diljit Dosanjh", cover: "https://upload.wikimedia.org/wikipedia/commons/6/65/Diljit_Dosanjh_grace_the_media_meet_of_Phillauri_4_%28cropped%29.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+            { title: "Patiala Peg", artist: "Diljit Dosanjh", cover: "https://ichef.bbci.co.uk/ace/standard/781/cpsprodpb/fd98/live/894999a0-7609-11ef-89f3-bd8dbe0b93fc.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+            { title: "5 Taara", artist: "Diljit Dosanjh", cover: "https://ichef.bbci.co.uk/ace/standard/781/cpsprodpb/fd98/live/894999a0-7609-11ef-89f3-bd8dbe0b93fc.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+            { title: "Meri Jaan", artist: "Diljit Dosanjh", cover: "https://www.livemint.com/lm-img/img/2024/10/27/600x338/Diljit_Dosanjh_concert_1730006290728_1730006290873.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+            { title: "Ishq Da Uda Ada", artist: "Diljit Dosanjh", cover: "https://static.toiimg.com/thumb/imgsize-23456,msid-102393965,width-600,resizemode-4/102393965.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+            { title: "Vibe", artist: "Diljit Dosanjh", cover: "https://lastfm.freetls.fastly.net/i/u/avatar170s/7e5a775aa981efa964e14203b73019e1", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+            { title: "No Worries", artist: "Diljit Dosanjh", cover: "https://img.mensxp.com/media/content/2021/Nov/Times-Diljit-Dosanjh-Admitted-His-Dislike-For-Bollywood1200_617fac31f0e19.jpeg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+            { title: "Born to Shine", artist: "Diljit Dosanjh", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs94mrHFb6cPwOcdnYSweGB_JYpAt5P6N0Hw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+            ],
+
+            romantic: [
+                { title: "Tum Hi Ho", artist: "Arijit Singh", cover: "https://hips.hearstapps.com/hmg-prod/images/romantic-song-lyrics-goo-goo-dolls-1578950979.jpg?crop=1xw:1xh;center,top&resize=980:*", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+                { title: "Tum Jo Aaye", artist: "Rahul Vaidya", cover: "https://i.scdn.co/image/ab67706f00000002dcb7b32f8bf2e6a7851245e3", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+                { title: "Pehla Nasha", artist: "Udit Narayan, Sadhana Sargam", cover: "https://hips.hearstapps.com/hmg-prod/images/love-song-lyrics-love-song-quotes-couple-kissing-holding-flowers-and-balloons-65809f133595e.jpg?crop=0.668xw:1.00xh;0.157xw,0&resize=1200:*", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+                { title: "Tum Se Hi", artist: "Mohit Chauhan", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNEsYZqxNJcLA-c-gfR6Tzl8Xy4lwmufIsRw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+                { title: "Raabta", artist: "Arijit Singh", cover: "https://m.media-amazon.com/images/I/51F4H7b3kAL.UXNaN_FMjpg_QL85.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+                { title: "Tum Jo Aaye", artist: "Rahul Vaidya", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTprrqH8eypTROEMQgVJyFLgLmrLKaSC_LRsg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+                { title: "Sun Saathiya", artist: "Priya Saraiya, Divya Kumar", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSd0hmq4drG053GUYIfztq4ZWLvNkFFQF10sg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+                { title: "Tum Bin", artist: "Ankit Tiwari", cover: "https://c.saavncdn.com/editorial/Ishqiyaan_20240902101612_500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+                { title: "Janam Janam", artist: "Arijit Singh, Antara Mitra", cover: "https://1601606126.rsc.cdn77.org/raagaimg/r_img/250/t/tc0001490.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+                { title: "Tum Hi Tum", artist: "Arjit Singh", cover: "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8441f234ac1e95e3a271c77565", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+            ],
+            pollywood: [
+                { title: "Lahore", artist: "Guru Randhawa", cover: "https://upload.wikimedia.org/wikipedia/commons/b/be/Guru_Randhawa_at_the_launch_of_MTV_Unplugged_Season_8_%28cropped%29.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+                { title: "High Rated Gabru", artist: "Guru Randhawa", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXsxwGDrSH_GPolhPsKbx-FjAf00sMpH6kdA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+                { title: "So High", artist: "Sidhu Moosewala", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSC-m5nQvPVizVMn3oZggis_DpzZ3JKE0Jqqw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+                { title: "Prada", artist: "Jass Manak", cover: "https://i1.sndcdn.com/artworks-jQKzeDzKyWOZ7uKV-Osj9dg-t500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+                { title: "Teeje Week", artist: "Jass Manak", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7BTZzUlF5rky5Royvw75lRgKSp7t8uAjmKg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+                { title: "Suit", artist: "Guru Randhawa", cover: "https://in.bmscdn.com/iedb/artist/images/website/poster/large/guru-randhawa-1065986-22-09-2017-12-29-56.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+                { title: "High Heels", artist: "Aditi Singh Sharma", cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/National_Awards_B_Praak_%28cropped%29.jpg/220px-National_Awards_B_Praak_%28cropped%29.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+                { title: "Mann Bharrya", artist: "B Praak", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF6J5bFDEXhPJCcRDgprHdaH6zocCergnQ_A&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+                { title: "Bamb Jatt", artist: "Diljit Dosanjh", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE2rA-uKNiljnY18ry3hAXvnqjWk95xYFwQg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+                { title: "Koi Vi Nahi", artist: "Shivjot", cover: "https://www.rajasthanfirst.in/sortd-service/imaginary/v22-01/jpg/large/high?url=cmFqYXN0aGFuZmlyc3QtaW4tcHJvZC1zb3J0ZC9tZWRpYWRjYTdmNGYwLTNlYTctMTFlZi1iMDE4LTU5NGRjNjg2OGI0My5qcGc=", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+            ],
+            jordansandhu: [
+                { title: "Meri Jaan", artist: "Jordan Sandhu", cover: "https://yt3.googleusercontent.com/WF22toRuk4LjuLAUVHFHW_ltChIhJ9r1smcviLEdZdXQzlbtzlF0bTnQ2El5T8qTBKHCraqxjQ=s900-c-k-c0x00ffffff-no-rj", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+                { title: "Bapu Zimidar", artist: "Jordan Sandhu", cover: "https://img.wynk.in/unsafe/200x200/filters:no_upscale():strip_exif():format(jpg)/http://s3-ap-south-1.amazonaws.com/wynk-music-cms/music/artists/profile/Jordan-Sandhu.png", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+                { title: "Laake Tera", artist: "Jordan Sandhu", cover: "https://c.saavncdn.com/artists/Jordan_Sandhu_003_20230503073730_500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+                { title: "Tera Hi Tera", artist: "Jordan Sandhu", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9bTVIPLIjjPOqqYlt7b6ggco5Sz70CnAVwA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+                { title: "Viah", artist: "Jordan Sandhu", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKSG_Z4BwvyZWt0QA7lJEvPg0L2S-phnXLgQ&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+                { title: "Rukh", artist: "Jordan Sandhu", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOjrNRXyVWbXtYZqf62HSoOO4U7E4RvewmFA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+                { title: "Kailash", artist: "Jordan Sandhu", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaaz6GpIo99NDmiYlLdpNcDeItqwMEknEEkQ&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+                { title: "Saddi Jodi", artist: "Jordan Sandhu", cover: "https://images.moviebuff.com/ca955bc6-f849-4a61-b267-2ec4643636c6?w=600", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+                { title: "Gallan Goriya", artist: "Jordan Sandhu", cover: "https://a10.gaanacdn.com/gn_img/artists/R7vKX6WmrP/7vKX09R5Km/size_m_1720779491.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+                { title: "Awaaz", artist: "Jordan Sandhu", cover: "https://www.famousbirthdays.com/headshots/jordan-sandhu-2.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+            ],
+            sidhumoosewala: [
+                { title: "So High", artist: "Sidhu Moosewala", cover: "https://i.pinimg.com/474x/fe/49/a9/fe49a9ffd8e6503efdb0054bd7d4aca9.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+                { title: "Issa Jatt", artist: "Sidhu Moosewala", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbXiyqpopuvy8G8Yq-waE8Mmd3yE_je1iGYw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+                { title: "Bad Fellow", artist: "Sidhu Moosewala", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrGD7wnU5AxKjPgp_k4ZgXHkrl8nhLeOR0Dg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+                { title: "Selfmade", artist: "Sidhu Moosewala", cover: "https://5.imimg.com/data5/SELLER/Default/2022/8/GL/DB/MU/158069952/new-product.jpeg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+                { title: "Just Listen", artist: "Sidhu Moosewala", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhB11A4-Y78sKB9K8MlQOpEu5etLl5U7_0fw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+                { title: "Warning Shots", artist: "Sidhu Moosewala", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhB11A4-Y78sKB9K8MlQOpEu5etLl5U7_0fw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+                { title: "Famous", artist: "Sidhu Moosewala", cover: "https://5.imimg.com/data5/SELLER/Default/2022/8/GL/DB/MU/158069952/new-product.jpeg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+                { title: "Dollar", artist: "Sidhu Moosewala", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzkEiYbz9rqQPisyIh00OhJCLMHTwboxCFeA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+                { title: "Yaarian", artist: "Sidhu Moosewala", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzkEiYbz9rqQPisyIh00OhJCLMHTwboxCFeA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+                { title: "Mann Siva", artist: "Sidhu Moosewala", cover: "https://5.imimg.com/data5/SELLER/Default/2022/8/GL/DB/MU/158069952/new-product.jpeg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+            ],
+            nirmatKhaira: [
+                { title: "Munda Hi Chahida", artist: "Nirmat Khaira", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcwlVTRFSVECPbY70KMtN8Glm_CP3eUIL46A&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+                { title: "Jatt Da Muqabla", artist: "Nirmat Khaira", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRayvvflXcPifEsPE5HMhQC22f4idvRz2U5Tw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+                { title: "Swaran Jatti", artist: "Nimrat Khaira", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST3w31lJPF7UB5FchduE94gIMnHRcwNuy0tw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+                { title: "Brobar Bhang", artist: "Nimrat Khaira", cover: "https://i1.sndcdn.com/artworks-L1PeCn9C4S2OfP87-4JFcyw-t500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
+                { title: "Raat Jashan Di", artist: "Nimrat Khaira", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTguV1NGNx6M3cpD39yUn_KOhVfGtsq0Pvh5Q&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3" },
+                { title: "Jagga", artist: "Nimrat Khaira", cover: "https://i1.sndcdn.com/artworks-L1PeCn9C4S2OfP87-4JFcyw-t500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3" },
+                { title: "Laake Boli", artist: "Nimrat Khaira", cover: "https://static.toiimg.com/thumb/imgsize-23456,msid-109978322,width-600,resizemode-4/109978322.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3" },
+                { title: "Jatt Da Muqabala", artist: "Nimrat Khaira", cover: "https://sosimg.sgp1.cdn.digitaloceanspaces.com/artist-gallery/2835567_1701951449.webp", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3" },
+                { title: "Teri Khaami", artist: "Nimrat Khaira", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRayvvflXcPifEsPE5HMhQC22f4idvRz2U5Tw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" },
+                { title: "Pehli Mulakaat", artist: "Nimrat Khaira", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcwlVTRFSVECPbY70KMtN8Glm_CP3eUIL46A&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3" }
+            ],
+            babbumaan: [
+      { title: "Mitran Da Jiya", artist: "Babbu Maan", cover: "https://i1.sndcdn.com/artworks-000080423356-epfhqr-t500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Teri Galliyan", artist: "Babbu Maan", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZn-L0LFlnnodASd79ftr1b8WX8nVHGD29nw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { title: "Maa", artist: "Babbu Maan", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzHWAOSAdOAA1SjbfNKMh69PcClt4XCjxI0Q&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { title: "Saada Dil", artist: "Babbu Maan", cover: "https://staticimg.amarujala.com/assets/images/2023/03/28/babbu-maan_1680002631.jpeg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+      { title: "Paisa Nasha", artist: "Babbu Maan", cover: "https://staticimg.amarujala.com/assets/images/2023/03/28/babbu-maan_1680002631.jpeg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+      { title: "Raat Di Gedi", artist: "Babbu Maan", cover: "https://i1.sndcdn.com/artworks-000080423356-epfhqr-t500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+      { title: "Dilli Wali Baat", artist: "Babbu Maan", cover: "https://staticimg.amarujala.com/assets/images/2023/03/28/babbu-maan_1680002631.jpeg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+      { title: "Kaliyan", artist: "Babbu Maan", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzHWAOSAdOAA1SjbfNKMh69PcClt4XCjxI0Q&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+      { title: "Jatt Di Pasand", artist: "Babbu Maan", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZn-L0LFlnnodASd79ftr1b8WX8nVHGD29nw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+      { title: "Keh Ke Gaya", artist: "Babbu Maan", cover: "https://i1.sndcdn.com/artworks-000080423356-epfhqr-t500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+    ],
+    amrindergill: [
+      { title: "Qismat", artist: "Amrinder Gill", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWENf0DgMpRvD-_gG3NQT69U4uu_nySErF6Q&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Chidiya", artist: "Amrinder Gill", cover: "https://i.pinimg.com/736x/1e/9c/f4/1e9cf47ffbd0bbb92601294c997b4c18.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { title: "Angreji Wali Madam", artist: "Amrinder Gill", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRunEqEyheMRH_c2xqpG2GdWM9sEG_qdD9O3g&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { title: "Dilli Wali Girlfriend", artist: "Amrinder Gill", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRunEqEyheMRH_c2xqpG2GdWM9sEG_qdD9O3g&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+      { title: "Pind", artist: "Amrinder Gill", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWENf0DgMpRvD-_gG3NQT69U4uu_nySErF6Q&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+      { title: "Khedan De Din", artist: "Amrinder Gill", cover: "https://in.bmscdn.com/iedb/artist/images/website/poster/large/amrinder-gill-11877-24-03-2017-17-27-16.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+      { title: "Ishq Da Uda Ada", artist: "Amrinder Gill", cover: "https://in.bmscdn.com/iedb/artist/images/website/poster/large/amrinder-gill-11877-24-03-2017-17-27-16.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+      { title: "Sohniye", artist: "Amrinder Gill", cover: "https://i.pinimg.com/736x/1e/9c/f4/1e9cf47ffbd0bbb92601294c997b4c18.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+      { title: "Ik Tera", artist: "Amrinder Gill", cover: "https://i.pinimg.com/736x/1e/9c/f4/1e9cf47ffbd0bbb92601294c997b4c18.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+      { title: "Duniya", artist: "Amrinder Gill", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWENf0DgMpRvD-_gG3NQT69U4uu_nySErF6Q&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+    ],
+    sabba: [
+      { title: "Pehla Pyaar", artist: "SABBA", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOEgxseOhJHupMPIHvCGA1RBSaG4TZctgZ3w&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Zindagi", artist: "SABBA", cover: "https://viberate-upload.ams3.cdn.digitaloceanspaces.com/prod/entity/artist/sabba-tTSLN", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { title: "Meri Zindagi", artist: "SABBA", cover: "https://viberate-upload.ams3.cdn.digitaloceanspaces.com/prod/entity/artist/sabba-tTSLN", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { title: "Aankhon Mein", artist: "SABBA", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRleceeOGaZemCJ5j8sKIj4g4B9OO54YC0WQA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+      { title: "Chandni Raat", artist: "SABBA", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRleceeOGaZemCJ5j8sKIj4g4B9OO54YC0WQA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+      { title: "Tera Pyaar", artist: "SABBA", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRleceeOGaZemCJ5j8sKIj4g4B9OO54YC0WQA&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+      { title: "Sannata", artist: "SABBA", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI-ovPmFTrlQqTDe4LNDKfRSlx9LArGw-zig&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+      { title: "Bikhra", artist: "SABBA", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI-ovPmFTrlQqTDe4LNDKfRSlx9LArGw-zig&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+      { title: "Awaara", artist: "SABBA", cover: "https://viberate-upload.ams3.cdn.digitaloceanspaces.com/prod/entity/artist/sabba-tTSLN", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+      { title: "Nasha", artist: "SABBA", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOEgxseOhJHupMPIHvCGA1RBSaG4TZctgZ3w&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+    ],
+    kaurb: [
+      { title: "Patake", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsZ5PXZdK1-9bXBBHT5Cq5hRr7xjaw3mvLOw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Angreji Wali Madam", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzUhOZyKP30lI4XrUM7QpsZOz-n_YX4p2R_g&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { title: "Kurti", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzUhOZyKP30lI4XrUM7QpsZOz-n_YX4p2R_g&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { title: "Paranda", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzUhOZyKP30lI4XrUM7QpsZOz-n_YX4p2R_g&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+      { title: "Teri Jatti", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzUhOZyKP30lI4XrUM7QpsZOz-n_YX4p2R_g&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+      { title: "4 Peg", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsZ5PXZdK1-9bXBBHT5Cq5hRr7xjaw3mvLOw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+      { title: "Pehla Pyaar", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzUhOZyKP30lI4XrUM7QpsZOz-n_YX4p2R_g&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+      { title: "Billi Akh", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzUhOZyKP30lI4XrUM7QpsZOz-n_YX4p2R_g&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+      { title: "Pind", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzUhOZyKP30lI4XrUM7QpsZOz-n_YX4p2R_g&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+      { title: "Raat Di Gedi", artist: "Kaur B", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsZ5PXZdK1-9bXBBHT5Cq5hRr7xjaw3mvLOw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+    ],
+    sunandasharma: [
+      { title: "Billi Akh", artist: "Sunanda Sharma", cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Sunanda_Sharma_%28singer%29.jpg/800px-Sunanda_Sharma_%28singer%29.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Patake", artist: "Sunanda Sharma", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC8NbICjJWGWfHYlPXVG6WcMtyOvjfFC5EPg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { title: "Jatt Da Flag", artist: "Sunanda Sharma", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC8NbICjJWGWfHYlPXVG6WcMtyOvjfFC5EPg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { title: "Duji Wari", artist: "Sunanda Sharma", cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Sunanda_Sharma_%28singer%29.jpg/800px-Sunanda_Sharma_%28singer%29.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+      { title: "Kalli Kalli", artist: "Sunanda Sharma", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC8NbICjJWGWfHYlPXVG6WcMtyOvjfFC5EPg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+      { title: "Laake Jhudi", artist: "Sunanda Sharma", cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Sunanda_Sharma_%28singer%29.jpg/800px-Sunanda_Sharma_%28singer%29.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+      { title: "Nashili", artist: "Sunanda Sharma", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC8NbICjJWGWfHYlPXVG6WcMtyOvjfFC5EPg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+      { title: "Pindaan Wali", artist: "Sunanda Sharma", cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Sunanda_Sharma_%28singer%29.jpg/800px-Sunanda_Sharma_%28singer%29.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+      { title: "Raatan", artist: "Sunanda Sharma", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC8NbICjJWGWfHYlPXVG6WcMtyOvjfFC5EPg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+      { title: "Thalle Wale", artist: "Sunanda Sharma", cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Sunanda_Sharma_%28singer%29.jpg/800px-Sunanda_Sharma_%28singer%29.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+    ],
+    aden: [
+      { title: "Closer", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Unbreakable", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { title: "Euphoria", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { title: "Faded Dreams", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+      { title: "Echoes", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+      { title: "Blissful Escape", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+      { title: "Shadows", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+      { title: "Lost in the Moment", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+      { title: "Silent Night", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+      { title: "Daydream", artist: "Aden", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfcl7io9Kd58jYmD-NpSx0gkyjuAavoe8fpg&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+    ],
+            karanAujla: [
+                { title: "Don’t Worry", artist: "Karan Aujla", cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Karan_Aujla_in_studio.jpg/800px-Karan_Aujla_in_studio.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+                { title: "Kya Baat Ay", artist: "Karan Aujla", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDW7WzXFjz7NdkAJaIrpB4Gd6mInwG9aaflw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" },
+               {title: "suit", artist: "Karan Aujla", cover: "https://i1.sndcdn.com/artworks-y2sAY5Jko7NVHERC-k3nvFw-t500x500.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { title: "Chitta Kurta", artist: "Karan Aujla", cover: "https://www.hire4event.com/apppanel/assets/artistimage/1648567073Karan-Aujla-Photo-2021-4.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { title: "Warning Shots", artist: "Karan Aujla", cover: "https://www.hire4event.com/apppanel/assets/artistimage/1648567073Karan-Aujla-Photo-2021-4.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { title: "Intro", artist: "Karan Aujla", cover: "https://www.hire4event.com/apppanel/assets/artistimage/1648567073Karan-Aujla-Photo-2021-4.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+      { title: "Lafaafa", artist: "Karan Aujla", cover: "https://www.hire4event.com/apppanel/assets/artistimage/1648567073Karan-Aujla-Photo-2021-4.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" },
+      { title: "Jatt Da Muqabla", artist: "Karan Aujla", cover: "https://www.hire4event.com/apppanel/assets/artistimage/1648567073Karan-Aujla-Photo-2021-4.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+      { title: "Keh Len De", artist: "Karan Aujla", cover: "https://www.hire4event.com/apppanel/assets/artistimage/1648567073Karan-Aujla-Photo-2021-4.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" },
+      { title: "Haan Haige Aa", artist: "Karan Aujla", cover: "https://www.hire4event.com/apppanel/assets/artistimage/1648567073Karan-Aujla-Photo-2021-4.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" },
+      { title: "G.O.A.T", artist: "Karan Aujla", cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDW7WzXFjz7NdkAJaIrpB4Gd6mInwG9aaflw&s", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3" },
+      { title: "Dilli Waali Baatcheet", artist: "Karan Aujla", cover: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Karan_Aujla_in_studio.jpg/800px-Karan_Aujla_in_studio.jpg", audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" }
+            ]
+        };
+        // Function to filter and generate songs based on the search input
+        function filterSongs() {
+            const searchQuery = document.getElementById('searchBar').value.toLowerCase();
+
+            // Filter the songs based on the search query
+            const filteredJordansandhu = jordansandhu.filter(song => song.title.toLowerCase().includes(searchQuery) || song.artist.toLowerCase().includes(searchQuery));
+            const filteredSidhumoosewala = sidhumoosewala.filter(song => song.title.toLowerCase().includes(searchQuery) || song.artist.toLowerCase().includes(searchQuery));
+
+            // Generate filtered songs
+            generateSongs('jordansandhu', filteredJordansandhu);
+            generateSongs('sidhumoosewala', filteredSidhumoosewala);
+        }
+
+        // Function to dynamically generate songs when a category is clicked
+        function generateSongs(category, songsArray) {
+            const container = document.getElementById(${category}Songs);
+            container.innerHTML = ''; // Clear existing songs
+            songsArray.forEach(song => {
+                const songDiv = document.createElement('div');
+                songDiv.classList.add('song');
+                songDiv.innerHTML = `
+                    <img src="${song.cover}" alt="${song.title}">
+                    <div class="song-info">
+                        <h4>${song.title}</h4>
+                        <p>${song.artist}</p>
+                    </div>
+                `;
+                songDiv.addEventListener('click', () => {
+                    playSong(song.audio, song.title, song.artist);
+                });
+                container.appendChild(songDiv);
+            });
+        }
+
+        // Toggle song list visibility when category is clicked
+        document.querySelectorAll('.playlist-category h3').forEach(categoryHeader => {
+            categoryHeader.addEventListener('click', () => {
+                const songList = categoryHeader.nextElementSibling;
+                songList.style.display = (songList.style.display === 'block') ? 'none' : 'block';
+            });
+        });
+
+        // Play selected song
+        let audioElement = new Audio();
+        let currentSongIndex = 0;
+        let currentPlaylist = [];
+
+        function playSong(audioUrl, title, artist) {
+            audioElement.src = audioUrl;
+            audioElement.play();
+            document.getElementById('playPauseButton').innerHTML = '<i class="fas fa-pause"></i>';
+        }
+
+        // Play/Pause button functionality
+        document.getElementById('playPauseButton').addEventListener('click', () => {
+            if (audioElement.paused) {
+                audioElement.play();
+                document.getElementById('playPauseButton').innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audioElement.pause();
+                document.getElementById('playPauseButton').innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+
+        // Next and Previous button functionality
+        document.getElementById('nextButton').addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex + 1) % currentPlaylist.length;
+            playSong(currentPlaylist[currentSongIndex].audio, currentPlaylist[currentSongIndex].title, currentPlaylist[currentSongIndex].artist);
+        });
+
+        document.getElementById('prevButton').addEventListener('click', () => {
+            currentSongIndex = (currentSongIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
+            playSong(currentPlaylist[currentSongIndex].audio, currentPlaylist[currentSongIndex].title, currentPlaylist[currentSongIndex].artist);
+        });
+
+        // Generate songs for each category
+        generateSongs('hollywood', songs.hollywood);
+        generateSongs('bollywood', songs.bollywood);
+        generateSongs('pollywood', songs.pollywood);
+        generateSongs('nirmatKhaira', songs.nirmatKhaira);
+        generateSongs('comedy', songs.comedy);
+        generateSongs('karanAujla', songs.karanAujla);
+        generateSongs('diljitdosanjh', songs.diljitdosanjh);
+        generateSongs('romantic', songs.romantic);
+        generateSongs('jordansandhu', songs.jordansandhu);
+        generateSongs('kaurb', songs.kaurb);
+        generateSongs('sunandasharma', songs.sunandasharma);
+        generateSongs('sidhumoosewala', songs.sidhumoosewala);
+        generateSongs('amrindergill', songs.amrindergill);
+        generateSongs('sabba', songs.sabba);
+        generateSongs('babbumaan', songs.babbumaan);
+        generateSongs('aden', songs.aden);
+    </script>
+
+</body>
+</html>
