@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Music Player</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome Icons -->
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('https://images.unsplash.com/photo-1521747116042-5a810fda9664') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .navbar .logo {
+            font-size: 1.8em;
+            color: #fff;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo i {
+            margin-right: 10px;
+            font-size: 2em;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar ul li {
+            display: inline-block;
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #cd7ace; 
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 100px 20px;
+        }
+
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        header p {
+            font-size: 1.5em;
+            color: #ddd;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        .download-section {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .download-button {
+            display: inline-block;
+            background-color: #ff5c5c;
+            color: white;
+            padding: 20px 40px;
+            font-size: 1.5em;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            width: 250px;
+        }
+
+        .download-button:hover {
+            background-color: #e04d4d;
+        }
+
+        .download-button img {
+            width: 40px;
+            margin-right: 10px;
+        }
+
+        .features {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 60px 20px;
+            margin-top: 80px;
+        }
+
+        .features h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .features ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .features ul li {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            font-size: 1.2em;
+            color: #fff;
+            text-align: left;
+        }
+
+        .features ul li i {
+            color: #ff5c5c;
+            margin-right: 10px;
+        }
+
+        .reviews {
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 60px 20px;
+            margin-top: 80px;
+        }
+
+        .reviews h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .reviews .review {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            font-size: 1.3em;
+            color: #fff;
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .reviews .review .user {
+            font-weight: bold;
+            color: #ff5c5c;
+        }
+
+        .reviews .review .rating i {
+            color: #ff5c5c;
+        }
+
+        @media screen and (max-width: 768px) {
+            header h1 {
+                font-size: 2.5em;
+            }
+
+            .download-section {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .features ul {
+                grid-template-columns: 1fr 1fr; 
+            }
+
+            .reviews .review {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-music"></i> Music Player
+        </div>
+        <ul>
+            <li><a href="hmp.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="premium.html"><i class="fas fa-crown"></i> Premium</a></li>
+            <li><a href="eg.html"><i class="fas fa-headphones"></i> Songs</a></li>
+            <li><a href="help.html"><i class="fas fa-question-circle"></i> Help</a></li>
+            <li><a href="download.html"><i class="fas fa-download"></i> Download</a></li>
+            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </ul>
+    </nav>
+    
+    <header>
+        <h1>Download Music Player</h1>
+        <p>Get the best music experience with our app on your device.</p>
+    </header>
+
+    
+    <section class="download-section">
+        <a href="#" class="download-button">
+            Download for Android
+        </a>
+        <a href="#" class="download-button">
+            Download for iOS
+        </a>
+    </section>
+
+    
+    <section class="features">
+        <h2>Why Choose Our Music Player?</h2>
+        <ul>
+            <li><i class="fas fa-headphones"></i> High-Quality Audio</li>
+            <li><i class="fas fa-cloud-upload-alt"></i> Cloud Sync</li>
+            <li><i class="fas fa-download"></i> Offline Listening</li>
+            <li><i class="fas fa-compact-disc"></i> Wide Music Library</li>
+            <li><i class="fas fa-ad"></i> Ad-Free Experience</li>
+            <li><i class="fas fa-cogs"></i> Customizable Settings</li>
+        </ul>
+    </section>
+
+    <section class="reviews">
+        <h2>What Users Are Saying</h2>
+        <div class="review">
+            <div class="user">John Doe</div>
+            <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <p>“Absolutely love this app! It's fast, intuitive, and the sound quality is incredible. I can listen to all my favorite tracks anytime, anywhere!”</p>
+        </div>
+        <div class="review">
+            <div class="user">Sarah Lee</div>
+            <div class="rating">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+            </div>
+            <p>“The offline listening feature is a game-changer for me. I can enjoy music even when I don't have an internet connection. Highly recommend!”</p>
+        </div>
+    </section>
+</body>
+</html>
