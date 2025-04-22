@@ -43,7 +43,7 @@ A simple and feature-rich music player application built using HTML, CSS and JAV
 
 ## 🚀 Getting Started
 
-### 📦 Installation
+### 📦 Installation 
 
 ```bash
 git clone "https://github.com/Himani-002/Music-Player.git"
