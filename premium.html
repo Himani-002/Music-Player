@@ -6,233 +6,105 @@
     <title>Premium Music Player</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"> <!-- Font Awesome Icons -->
     <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #121212;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 1rem;
+      background: linear-gradient(135deg, #1db954, #191414);
+    }
+
+    .cta-button, .subscribe-button {
+      background: gold;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      margin: 1rem;
+    }
+
+    .cta-button:hover, .subscribe-button:hover {
+      transform: scale(1.1);
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 3rem 1rem;
+    }
+
+    .feature-card {
+      background: #282828;
+      padding: 1.5rem;
+      border-radius: 15px;
+      width: 300px;
+      margin: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: scale(1.05);
+    }
+
+    .comparison {
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    .comparison table {
+      width: 90%;
+      margin: auto;
+      background: #1f1f1f;
+      border-collapse: collapse;
+    }
+
+    .comparison th, .comparison td {
+      padding: 1rem;
+      border: 1px solid #444;
+    }
+
+    .locked-content {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .blurred, .unlocked {
+      margin: auto;
+      padding: 2rem;
+      background: #444;
+      border-radius: 10px;
+      max-width: 500px;
+    }
+
+    .blurred {
+      filter: blur(5px);
+    }
+
+    .status {
+      text-align: center;
+      margin: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
     
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: url('https://images.unsplash.com/photo-1501983069111-b0b4c33b57ea') no-repeat center center fixed;
-            background-size: cover;
-            color: #fff;
-            text-align: center;
-            padding: 0;
-            margin: 0;
-        }
     
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px 30px;
-            border-radius: 5px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 10;
-        }
-
-        .navbar .logo {
-            font-size: 1.8em;
-            color: #fff;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-
-        .navbar .logo i {
-            margin-right: 10px;
-            font-size: 2em;
-        }
-
-        .navbar ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-
-        .navbar ul li {
-            display: inline-block;
-        }
-
-        .navbar ul li a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.2em;
-            transition: color 0.3s ease;
-        }
-
-        .navbar ul li a:hover {
-            color: #cd7ace; 
-        }
-
-
-        header {
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 100px 20px;
-        }
-
-        header h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        header p {
-            font-size: 1.5em;
-            color: #ddd;
-            margin-bottom: 40px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
-        }
-
-        .pricing {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .pricing .plan {
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            width: 250px;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .pricing .plan:hover {
-            transform: scale(1.05);
-        }
-
-        .pricing .plan h3 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: #4CAF50;
-        }
-
-        .pricing .plan p {
-            font-size: 1.1em;
-            color: #fff;
-            margin-bottom: 20px;
-        }
-
-        .pricing .plan .price {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #4CAF50;
-            margin-bottom: 20px;
-        }
-
-        .pricing .plan .cta {
-            text-decoration: none;
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 5px;
-            font-size: 1.3em;
-            transition: background-color 0.3s ease;
-        }
-
-        .pricing .plan .cta:hover {
-            background-color: #45a049;
-        }
-
-        .features {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 60px 20px;
-        }
-
-        .features h2 {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            color: #fff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        .features ul {
-            list-style: none;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .features ul li {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            font-size: 1.2em;
-            color: #fff;
-            text-align: left;
-        }
-
-        .features ul li i {
-            color: #4CAF50;
-            margin-right: 10px;
-        }
-
-        .cta-section {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 60px 20px;
-        }
-
-        .cta-section h2 {
-            font-size: 2.5em;
-            color: #fff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-            margin-bottom: 30px;
-        }
-
-        .cta-section a {
-            text-decoration: none;
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 5px;
-            font-size: 1.5em;
-            transition: background-color 0.3s ease;
-        }
-
-        .cta-section a:hover {
-            background-color: #45a049;
-        }
-
-        @media screen and (max-width: 768px) {
-            header h1 {
-                font-size: 2.5em;
-            }
-
-            .pricing {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .pricing .plan {
-                width: 100%;
-                padding: 30px;
-            }
-
-            .features ul {
-                grid-template-columns: 1fr 1fr; 
-            }
-
-            .cta-section a {
-                font-size: 1.3em;
-                padding: 12px 25px;
-            }
-            
-        }
-    </style>
+       
 </head>
 <body>
     
