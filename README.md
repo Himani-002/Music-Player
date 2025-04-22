@@ -46,7 +46,7 @@ A simple and feature-rich music player application built using HTML, CSS and JAV
 ### 📦 Installation
 
 ```bash
-git clone https://github.com/yourusername/music-player.git
+git clone "https://github.com/Himani-002/Music-Player.git"
 cd music-player
 # If using a package manager
 npm install
