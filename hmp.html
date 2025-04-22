@@ -235,62 +235,45 @@
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="logo">
-            <i class="fas fa-music"></i> Music Player
-        </div>
-        <ul>
-            <li><a href="hmp.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="premium.html"><i class="fas fa-crown"></i> Premium</a></li>
-            <li><a href="eg.html"><i class="fas fa-headphones"></i> Songs</a></li>
-            <li><a href="help.html"><i class="fas fa-question-circle"></i> Help</a></li>
-            <li><a href="download.html"><i class="fas fa-download"></i> Download</a></li>
-            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-        </ul>
-    </nav>
+   <div class="container">
+    <header>
+      <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+      <h1>TOP SONGS</h1>
+      <h4>Play up your music right where you left off...</h4>
+    </header>
 
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search songs or podcasts..." onkeyup="filterCards()" />
+      <br />
+      <button class="filter-btn active" onclick="filterCategory('all')">All</button>
+      <button class="filter-btn" onclick="filterCategory('music')">Music</button>
+      <button class="filter-btn" onclick="filterCategory('podcast')">Podcasts</button>
+    </div>
 
-    <div class="container">
-        <header>
-            <h1>TOP SONGS</h1>
-            <h4>Play up your music right where you left off...</h4>
-        </header>
+    <div class="play-button-wrapper">
+      <a href="eg.html" class="play-button">Play Music</a>
+    </div>
 
-
-        <a href="eg.html">Play Music</a>
-
-        <section class="image-gallery">
-    
-            <div class="image-container">
-                <img src="https://i.scdn.co/image/ab67706f0000000252feef11af8c9d412769ec5a" alt="Taylor Swift" />
-                <p>Taylor Swift</p>
-            </div>
-            
-            <div class="image-container">
-                <img src="https://i.ytimg.com/vi/VwomfkFDvH4/sddefault.jpg" alt="Shape of You" />
-                <p>Shape of You</p>
-            </div>
-
-            <div class="image-container">
-                <img src="https://hips.hearstapps.com/hmg-prod/images/ffw-dd-3-jpg-66ad001694c5b.jpg?crop=1.00xw:0.669xh;0,0.152xh&resize=1120:*" alt="Diljit Dosanjh"/>
-                <p>Diljit Dosanjh</p>
-            </div>
-
-            <div class="image-container">
-                <img src="https://m.media-amazon.com/images/M/MV5BMzIxZDFiOTctOTZkMS00MjRkLWE2NzMtYzYwMjEzZmY5ZjU5XkEyXkFqcGc@._V1_.jpg" alt="Tones and I"/>
-                <p>Tones and I</p>
-            </div>
-
-            <div class="image-container">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRol_pLZI7SptbO69Y8C8BvZVmAj_UCs4dBQg&s" alt="AR Rahman"/>
-                <p>AR Rahman</p>
-            </div>
-
-            <div class="image-container">
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/90/Animal_%282023_film%29_poster.jpg/220px-Animal_%282023_film%29_poster.jpg" alt="Animal"/>
-                <p>Animal</p>
-            </div>
-        </section>
+    <h2 class="section-title">Explore</h2>
+    <div class="scroll-bar" id="cardContainer">
+      <div class="card" data-category="music">
+        <img src="https://i.scdn.co/image/ab67706f0000000252feef11af8c9d412769ec5a" alt="Taylor Swift" />
+        <p>Taylor Swift</p>
+        <button onclick="playPreview('Taylor Swift', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')">▶️ Play</button>
+        <button onclick="addToPlaylist('Taylor Swift')">➕ Playlist</button>
+      </div>
+      <div class="card" data-category="music">
+        <img src="https://i.ytimg.com/vi/VwomfkFDvH4/sddefault.jpg" alt="Shape of You" />
+        <p>Shape of You</p>
+        <button onclick="playPreview('Shape of You', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')">▶️ Play</button>
+        <button onclick="addToPlaylist('Shape of You')">➕ Playlist</button>
+      </div>
+      <div class="card" data-category="podcast">
+        <img src="https://cdn.pixabay.com/photo/2016/03/05/19/02/abstract-1238247_1280.jpg" alt="Podcast" />
+        <p>The Chill Cast</p>
+        <button onclick="playPreview('The Chill Cast', 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3')">▶️ Play</button>
+        <button onclick="addToPlaylist('The Chill Cast')">➕ Playlist</button>
+      </div>
     </div>
 </body>
 </html>
