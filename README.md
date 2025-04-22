@@ -36,7 +36,7 @@ A simple and feature-rich music player application built using HTML, CSS and JAV
 
 - **Frontend:** HTML, CSS, JavaScript
 - **Audio Playback:** HTML5 `<audio>` element
-- **Design Tools:** Figma, Canva (for UI/UX mockups)
+- **Design Tools:** Figma, Canva (for UI/UX mockups) 
 - **Testing:** Manual testing across devices and browsers
 
 ---
