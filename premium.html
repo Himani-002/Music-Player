@@ -170,5 +170,39 @@
     <p>Only ₹99/month for unlimited features!</p>
     <button class="subscribe-button" onclick="subscribe()">Confirm Subscription</button>
   </div>
+    <!-- JavaScript -->
+  <script>
+    function updateUI() {
+      const isPremium = localStorage.getItem("userType") === "premium";
+      document.getElementById("userStatus").textContent = isPremium ? "Premium" : "Free";
+      document.getElementById("exclusiveContent").className = isPremium ? "unlocked" : "blurred";
+      document.getElementById("exclusiveContent").textContent = isPremium
+        ? "🎵 Exclusive Premium Playlist: Trending Now!"
+        : "🎵 Curated Playlist for Premium Users 🔒";
+
+      document.getElementById("actionButtons").style.display = isPremium ? "none" : "block";
+    }
+
+    function redirectToSubscribe() {
+      document.querySelector(".hero").style.display = "none";
+      document.querySelector(".features").style.display = "none";
+      document.querySelector(".comparison").style.display = "none";
+      document.querySelector(".locked-content").style.display = "none";
+      document.getElementById("subscribePage").style.display = "block";
+    }
+
+    function subscribe() {
+      localStorage.setItem("userType", "premium");
+      alert("Thank you for subscribing to Premium!");
+      location.reload();
+    }
+
+    function logout() {
+      localStorage.removeItem("userType");
+      location.reload();
+    }
+
+    updateUI();
+  </script>
 </body>
 </html>
