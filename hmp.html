@@ -334,6 +334,7 @@
         card.style.display = title.includes(query) ? "flex" : "none";
       });
     }
+    
 
     function filterCategory(category) {
       const buttons = document.querySelectorAll(".filter-btn");
@@ -346,13 +347,14 @@
       });
       filterCards();
     }
-
+        
     window.onload = function () {
       const savedTheme = localStorage.getItem("theme");
       if (savedTheme === "dark") {
         document.body.classList.add("dark-theme");
       }
     }
+    
   </script>
 </body>
 </html>
