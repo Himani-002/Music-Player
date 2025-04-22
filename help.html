@@ -58,7 +58,31 @@
       <p>Use the playback bar to Play, Pause, Skip, or Rewind. Long-press on the track for more options like Add to Playlist.</p>
     </details>
   </div>
+<script>
+    // 🌗 Theme Toggle
+    function toggleTheme() {
+      document.body.classList.toggle('light');
+    }
 
+    // 🔍 Live Search
+    const searchInput = document.getElementById('searchInput');
+    const sections = document.querySelectorAll('details');
+
+    searchInput.addEventListener('input', () => {
+      const query = searchInput.value.toLowerCase();
+
+      sections.forEach(section => {
+        const summary = section.querySelector('summary').textContent.toLowerCase();
+        const content = section.querySelector('p').textContent.toLowerCase();
+
+        if (summary.includes(query) || content.includes(query)) {
+          section.style.display = 'block';
+        } else {
+          section.style.display = 'none';
+        }
+      });
+    });
+  </script>
     
 </body>
 </html>
