@@ -29,6 +29,85 @@
       color: var(--text-color);
       transition: background-color 0.4s ease, color 0.4s ease;
     }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+        }
+
+        .navbar .logo {
+            font-size: 1.8em;
+            color: #fff;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar .logo i {
+            margin-right: 10px;
+            font-size: 2em;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        .navbar ul li {
+            display: inline-block;c
+        }
+
+        .navbar ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: color 0.3s ease;
+        }
+
+        .navbar ul li a:hover {
+            color: #cd7ace; 
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background-color: #181818;
+            width: 250px;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar h1 {
+            color: #1DB954;
+            font-size: 1.6rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sidebar .nav-item {
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .sidebar .nav-item:hover {
+            color: #fff;
+        }
 
     .container {
       max-width: 1100px;
