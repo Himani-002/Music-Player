@@ -4,7 +4,7 @@ A simple and feature-rich music player application built using HTML, CSS and JAV
 ## 🧾 Overview
 
 **Music Player** is a sleek and intuitive music player app that allows users to stream or play locally stored music, manage their library, create custom playlists, and enjoy features like equalizers and lyrics. Built with a focus on simplicity, performance, and user experience.
-
+    
 ---
 
 ## ✅ Features Recap
