@@ -76,25 +76,7 @@
   .navbar ul li a:hover {
     color: #1db954;
   }
-  
-  @media (max-width: 768px) {
-    .navbar {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .navbar ul {
-      flex-direction: column;
-      width: 100%;
-      gap: 1rem;
-      padding-top: 1rem;
-    }
-  
-    .navbar ul li a {
-      font-size: 1.1rem;
-    }
-  }
-         footer {
+  footer {
     margin-top: 50px;
     padding: 20px;
     background-color: var(--card-bg);
@@ -114,6 +96,25 @@
   
   footer a:hover {
     text-decoration: underline;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .navbar ul {
+      flex-direction: column;
+      width: 100%;
+      gap: 1rem;
+      padding-top: 1rem;
+    }
+  
+    .navbar ul li a {
+      font-size: 1.1rem;
+    }
   }
   
 
@@ -190,19 +191,7 @@
   </style>
 <body>
     
-    <nav class="navbar">
-        <div class="logo">
-            <i class="fas fa-music"></i> Music Player
-        </div>
-        <ul>
-            <li><a href="hmp.html"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="premium.html"><i class="fas fa-crown"></i> Premium</a></li>
-            <li><a href="eg.html"><i class="fas fa-headphones"></i> Songs</a></li>
-            <li><a href="help.html"><i class="fas fa-question-circle"></i> Help</a></li>
-            <li><a href="download.html"><i class="fas fa-download"></i> Download</a></li>
-            <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
-        </ul>
-    </nav>
+    
     <div class="help-container">
     <h1>🎧 Music Player Help</h1>
 
@@ -210,6 +199,7 @@
       <input type="text" id="searchInput" placeholder="Search help topics...">
       <button class="toggle-theme" onclick="toggleTheme()">🌗 Theme</button>
     </div>
+
 <details open>
       <summary>⬇ Offline Downloads</summary>
       <p>Tap the download icon next to a song or album to save it for offline listening. Downloaded music is available even without internet.</p>
@@ -239,15 +229,18 @@
       <summary>▶ Controls</summary>
       <p>Use the playback bar to Play, Pause, Skip, or Rewind. Long-press on the track for more options like Add to Playlist.</p>
     </details>
-         </div>
-  <footer>
- <a href="#">Premium</a>
- <a href="#">Profile</a>
- <a href="#">Help</a>
- <a href="#">Music</a>
-</footer>
+  </div>
+    <ul>
+      <footer>
+      <li><a href="homepage.html"><i class="fas fa-home"></i> Home</a></li>
+      <li><a href="premium page.html"><i class="fas fa-crown"></i> Premium</a></li>
+      <li><a href="eg.html"><i class="fas fa-headphones"></i> Songs</a></li>
+      <li><a href="help.html"><i class="fas fa-question-circle"></i> Help</a></li>
+      <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+        </footer>
+  </ul>
 </div>
-    
+
   </div>
 <script>
     // 🌗 Theme Toggle
@@ -273,7 +266,6 @@
         }
       });
     });
-    
   </script>
     
 </body>
