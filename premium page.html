@@ -26,6 +26,27 @@
   z-index: 1000;
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
+footer {
+  margin-top: 50px;
+  padding: 20px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  font-size: 0.95rem;
+}
+
+footer a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
 
     .hero {
       text-align: center;
@@ -120,6 +141,7 @@
        
 </head>
 <body>
+</div>
     
  <!-- Hero Banner -->
     <section class="hero">
@@ -170,6 +192,16 @@
     <p>Only ₹99/month for unlimited features!</p>
     <button class="subscribe-button" onclick="subscribe()">Confirm Subscription</button>
   </div>
+  <ul>
+    <footer>
+    <li><a href="homepage.html"><i class="fas fa-home"></i> Home</a></li>
+    <li><a href="premium page.html"><i class="fas fa-crown"></i> Premium</a></li>
+    <li><a href="eg.html"><i class="fas fa-headphones"></i> Songs</a></li>
+    <li><a href="help.html"><i class="fas fa-question-circle"></i> Help</a></li>
+    <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+      </footer>
+</ul>
+    </div>
     <!-- JavaScript -->
   <script>
     function updateUI() {
