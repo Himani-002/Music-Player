@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Music Player Login</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --text: #f1f1f1;
+      --card: #1e1e1e;
+      --accent: #1db954;
+      --btn: #1db954;
+      --btn-hover: #1ed760;
+      --danger: #e63946;
+      --border-radius: 12px;
+      --font: 'Segoe UI', sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg: #f9f9f9;
+      --text: #121212;
+      --card: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .container {
+      background-color: var(--card);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+
+    h1 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 1rem 0;
+      border-radius: var(--border-radius);
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.9rem;
+      border: none;
+      background-color: var(--btn);
+      color: white;
+      font-size: 1rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 0.8rem;
+    }
+
+    .btn:hover {
+      background-color: var(--btn-hover);
+    }
+
+    .logout {
+      background-color: var(--danger);
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .toggle-theme {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--text);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-theme" onclick="toggleTheme()">Toggle Theme</button>
+
+  <div class="container" id="authContainer">
+    <h1>🎵 Music Player</h1>
+
+    <div id="loginForm">
+      <input type="text" id="username" placeholder="Enter your username" />
+      <button class="btn" onclick="login()">Login</button>
+    </div>
+
+    <div id="logoutSection" style="display: none;">
+      <p>Welcome, <strong id="userDisplay"></strong>!</p>
+      <a href="homepage.html" class="btn">▶️ Play Music</a>
+      <button class="btn logout" onclick="logout()">Logout</button>
+    </div>
+
+    <div class="message" id="messageBox"></div>
+  </div>
+
+  <script>
+    function showMessage(msg, type = 'info') {
+      const box = document.getElementById('messageBox');
+      box.textContent = msg;
+      box.style.color = type === 'error' ? 'var(--danger)' : 'var(--accent)';
+    }
+
+    function login() {
+      const username = document.getElementById('username').value.trim();
+      if (!username) {
+        showMessage('Please enter a username.', 'error');
+        return;
+      }
+
+      localStorage.setItem('username', username);
+      updateUI();
+      showMessage(`Welcome back, ${username}!`);
+    }
+
+    function logout() {
+      localStorage.removeItem('username');
+      updateUI();
+      showMessage('You have been logged out.');
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+
+    function updateUI() {
+      const username = localStorage.getItem('username');
+      const loginForm = document.getElementById('loginForm');
+      const logoutSection = document.getElementById('logoutSection');
+      const userDisplay = document.getElementById('userDisplay');
+
+      if (username) {
+        loginForm.style.display = 'none';
+        logoutSection.style.display = 'block';
+        userDisplay.textContent = username;
+      } else {
+        loginForm.style.display = 'block';
+        logoutSection.style.display = 'none';
+      }
+    }
+
+    window.onload = function () {
+      const theme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      updateUI();
+    };
+  </script>
+</body>
+</html>
